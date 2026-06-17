@@ -1,18 +1,46 @@
 # bayrambozyel.com
 
-Bayram Bozyel'in kişisel sayfası. Astro ile yazılmış, statik bir site;
-Cloudflare Workers (Static Assets) üzerinde yayında.
+Bayram Bozyel'in kişisel sitesi. Astro 5 ile yazılmış, statik, Cloudflare
+Workers Static Assets üzerinde yayımlanan, Sveltia CMS ile (`/admin`)
+doğrudan tarayıcı üzerinden düzenlenebilir bir blog.
 
-Tasarım hedefi: **sade, okunaklı, az JavaScript, hızlı**.
+**Tasarım hedefi**: editorial, lean, hızlı, az JavaScript, gerçek dergi
+hissi (Fraunces display + Source Serif body).
 
 ---
 
-## Stack
+## İçerik mimarisi
 
-- **Astro 5** — content collections + static output
-- **Saf CSS** — tek bir `global.css`, koyu/açık tema otomatik (prefers-color-scheme)
-- **Cloudflare Workers Static Assets** — `dist/` doğrudan edge'den servis edilir, Worker script yok
-- **Sıfır client JS** — tüm sayfalar tamamen statik HTML
+Dört bağımsız koleksiyon — her biri `/admin` panelinden ayrı sekme:
+
+| Koleksiyon | URL | Şema |
+|---|---|---|
+| **Makaleler** | `/makaleler` | başlık, tarih, özet, kaynak yayın + URL, etiketler, içerik |
+| **Röportajlar** | `/roportajlar` | başlık, tarih, yayın organı, söyleşi yapan, özet, kaynak URL, gömme URL |
+| **Etkinlikler** | `/etkinlikler` | başlık, tarih, yer, tür (konuşma/panel/duyuru), özet, kaynak URL |
+| **Videolar** | `/videolar` | başlık, tarih, YouTube ID, yayın organı, özet |
+
+Statik sayfalar: **Hakkımda**, **İletişim**, **404**, **RSS**.
+
+## Sayfa haritası
+
+```
+/                       Hero + her koleksiyonun son birkaç girdisi
+/makaleler              Liste (yıla göre)
+/makaleler/[slug]       Makale (drop cap, kaynak linki)
+/roportajlar            Liste
+/roportajlar/[slug]     Röportaj
+/etkinlikler            Liste
+/etkinlikler/[slug]     Etkinlik
+/videolar               Liste
+/videolar/[slug]        Video (YouTube nocookie embed)
+/hakkimda               Biyografi + portre
+/iletisim               E-posta + X + RSS
+/admin                  Sveltia CMS (Bayram Bozyel için içerik düzenleme)
+/rss.xml                Birleşik RSS akışı (4 koleksiyon)
+```
+
+---
 
 ## Yerel geliştirme
 
@@ -23,128 +51,116 @@ npm run build     # dist/ üretir
 npm run preview   # build çıktısını yerelde önizler
 ```
 
-## Yazı ekleme
+## Stack
 
-Yazılar `src/content/posts/*.md` altında. Her dosya bir yazıdır.
-Frontmatter şeması (`src/content.config.ts`):
+- **Astro 5** content collections + static output
+- **Fraunces** (variable, opsz) + **Source Serif 4** body (Google Fonts)
+- **Saf CSS** — tek `global.css`, otomatik dark mode
+- **Sveltia CMS** (MIT, Decap'in modern fork'u) — `/admin/` altında
+- **GitHub Actions** → `wrangler deploy` → **Cloudflare Workers Static Assets**
+- **Sıfır client JS** ana sitede; sadece `/admin` Sveltia için JS yükler
 
-```yaml
 ---
-title: "Yazının başlığı"
-date: 2026-06-17           # YYYY-MM-DD
-summary: "Listede gözüken kısa özet (opsiyonel)"
-tags: ["siyaset", "kurd"]  # opsiyonel
-draft: false               # true ise yayınlanmaz
----
-
-Markdown gövdesi buraya.
-```
-
-Yeni dosya eklendiğinde `npm run build` ile site yeniden üretilir
-ve `npm run deploy` ile yayınlanır.
-
-URL şeması: `/yazilar/<dosya-adi>` (örn. `merhaba.md` → `/yazilar/merhaba`).
-
-## Sayfa yapısı
-
-```
-/                  Ana sayfa — hero + son 5 yazı + başka yayınlarda 3 yazı
-/yazilar           Tüm yazılar listesi (yıla göre gruplandırılmış)
-/yazilar/[slug]    Yazı detayı
-/arsiv             Dış yayınlardaki yazılar + söyleşiler
-/hakkimda          Biyografi + konular + kitaplar
-/iletisim          E-posta, X, RSS
-/rss.xml           RSS akışı
-/404               Bulunamadı sayfası
-```
-
-**Birincil nav**: Yazılar · Arşiv · Hakkımda (3 öğe — 390px'te asla taşmaz)
-**Footer**: Yazılar · Hakkımda · İletişim · RSS
 
 ## Cloudflare Workers'a deploy
 
-İlk kurulum (bir kere):
+İlk deploy (yerel):
 
 ```bash
 npx wrangler login
-```
-
-Sonraki her deploy:
-
-```bash
 npm run deploy    # = astro build && wrangler deploy
 ```
 
+Sonraki deploy'lar otomatik: `main` branch'ına her push → GitHub Actions →
+build → `wrangler deploy`. Bunun için bir kerelik secret kurulumu için
+[`docs/CMS_AUTH.md`](docs/CMS_AUTH.md).
+
 `wrangler.toml`:
+- `name = "bayram-bozyel"` → Worker adı
+- `[assets] directory = "./dist"` → Astro çıktısı
+- `not_found_handling = "404-page"` → dist/404.html
+- `html_handling = "auto-trailing-slash"`
 
-- `name = "bayram-bozyel"` — Worker adı
-- `[assets] directory = "./dist"` — Astro çıktısı buradan servis edilir
-- `not_found_handling = "404-page"` — `dist/404.html` 404'lerde gösterilir
-- `html_handling = "auto-trailing-slash"` — `/yazilar` ve `/yazilar/` aynı içeriği verir
+Özel domain (`bayrambozyel.com`) bağladığında `routes` bloğunu yorumdan çıkar.
 
-İlk deploy sonrası Worker `https://bayram-bozyel.<account>.workers.dev`
-üzerinde yayında olur. Özel domain (`bayrambozyel.com`) bağlamak için
-`wrangler.toml` içindeki `routes` bloğunu yorumdan çıkarın ve
-Cloudflare dashboard'dan domain'i hesabınıza ekleyin.
+---
+
+## İçerik yönetimi (CMS)
+
+`bayrambozyel.com/admin` → Bayram Bozyel GitHub ile login →
+form üzerinden yazı ekler/düzenler → save → repo'ya commit → GH Actions →
+deploy. Hiç git/markdown bilmesi gerekmez.
+
+Kurulum (bir kere):
+
+1. **GitHub OAuth App** → callback URL: `https://bayram-bozyel-auth.bedirhancode.workers.dev/oauth/callback`
+2. **OAuth proxy Worker** → `sveltia/sveltia-cms-auth` repo'sundan deploy
+3. **GitHub Actions secret'ları** → `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
+4. **Bayram amca → repo collaborator** olarak eklenmeli
+
+Adım adım: [`docs/CMS_AUTH.md`](docs/CMS_AUTH.md).
+
+---
 
 ## Dosya haritası
 
 ```
-astro.config.mjs        Astro yapılandırması (site, trailingSlash)
-wrangler.toml           Cloudflare Workers deploy ayarları
-src/
-  content.config.ts     Posts collection şeması
-  layouts/Base.astro    HTML iskeleti + meta etiketleri
-  components/
-    Header.astro        Üst gezinme (3 nav öğesi)
-    Footer.astro        Alt bilgi + iletişim + RSS
-    PostList.astro      Blog yazı listesi (yıl gruplandırma destekli)
-    ExternalList.astro  Dış yayın linklerinin listesi
-    Portrait.astro      Optimize edilmiş portre (Astro Image)
-  data/
-    external.ts         Dış yazı + söyleşi + konu listesi (elle güncellenir)
-  assets/
-    bayram-bozyel.jpg   Portre kaynağı — derleme sırasında webp'ye dönüştürülür
-  pages/
-    index.astro         Ana sayfa
-    hakkimda.astro      Biyografi (portre + konular + kitaplar)
-    iletisim.astro      İletişim (e-posta, X, RSS)
-    arsiv.astro         Dış yayınlardaki yazı + söyleşi listesi
-    yazilar/
-      index.astro       Yazı listesi (yıla göre gruplandırılmış)
-      [...slug].astro   Yazı detayı (dinamik)
-    rss.xml.ts          RSS feed üreteci
-    404.astro
-  styles/global.css     Tüm stiller (tek dosya, koşullu dark mode)
-  content/posts/        Markdown yazılar (yeni yazılar buraya)
+astro.config.mjs        Astro config
+wrangler.toml           Cloudflare Workers deploy
+.github/workflows/
+  deploy.yml            Push → build → Cloudflare deploy
+docs/
+  CMS_AUTH.md           OAuth + secret kurulumu
 public/
+  admin/
+    index.html          Sveltia CMS yükleyici
+    config.yml          Koleksiyon şemaları
   favicon.svg
   robots.txt
+src/
+  content.config.ts     Astro koleksiyon şemaları
+  content/
+    makaleler/          .md dosyaları (Sveltia üzerinden de yönetilir)
+    roportajlar/
+    etkinlikler/
+    videolar/
+  assets/
+    bayram-bozyel.jpg   Portre (build sırasında webp optimize edilir)
+  layouts/Base.astro    HTML iskeleti
+  lib/format.ts         Türkçe tarih + gruplama
+  components/
+    Header.astro        Üst nav (5 öğe)
+    Footer.astro        Alt bilgi + RSS
+    Portrait.astro      Astro:assets ile optimize portre
+    EntryList.astro     Tüm koleksiyon listelemeleri
+  pages/
+    index.astro         Ana sayfa (her koleksiyondan son birkaç)
+    hakkimda.astro      Biyografi + portre + kitaplar
+    iletisim.astro      E-posta, X, RSS
+    makaleler/
+      index.astro       Liste
+      [...slug].astro   Detay
+    roportajlar/
+      index.astro
+      [...slug].astro
+    etkinlikler/
+      index.astro
+      [...slug].astro
+    videolar/
+      index.astro
+      [...slug].astro
+    rss.xml.ts          Birleşik RSS feed
+    404.astro
+  styles/global.css     Tüm stiller (tek dosya)
 ```
 
-## Dış yazı / söyleşi ekleme
+---
 
-`src/data/external.ts` içindeki `articles` veya `interviews` dizisine yeni
-bir nesne ekleyin. Şema:
+## Yapılacaklar (v2)
 
-```ts
-{
-  title: "...",
-  outlet: "Gazete Duvar",
-  date: "2026-01-15",   // YYYY-MM-DD
-  url: "https://...",
-  excerpt: "Kısa alıntı",   // articles
-  // quote: "Kısa alıntı",  // interviews
-}
-```
-
-Ana sayfada en yeni 3 dış yazı görünür; tam liste `/arsiv`'tedir.
-
-## v1'den sonra düşünülecekler
-
-- Open Graph görseli (her yazı için)
-- Sitemap (`@astrojs/sitemap`)
-- Etiket / arşiv sayfaları
-- Yazılarda kapak görseli alanı
-- Newsletter (sade bir e-posta abonelik formu, ör. Buttondown)
-- Yorum (Webmention veya yok)
+- [ ] Bayram amcadan daha doğal/güncel bir portre alıp `src/assets/` altına koymak
+- [ ] Kürtçe (Kurmancî) sürüm `/ku/` altında
+- [ ] Etiket / konu sayfaları (`/konu/anadilde-egitim` vb.)
+- [ ] Sitemap (`@astrojs/sitemap`)
+- [ ] Newsletter abonelik formu (Buttondown / Beehiiv)
+- [ ] Open Graph görseli (her yazı için generate)
