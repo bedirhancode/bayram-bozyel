@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { fmtLong } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const items = await getCollection('videolar', ({ data }) => !data.draft);
+  return items.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Build embed URL — prefer YouTube id (privacy-enhanced nocookie embed).
+const embed = entry.data.youtubeId
+  ? `https://www.youtube-nocookie.com/embed/${entry.data.youtubeId}`
+  : entry.data.embedUrl ?? null;
+
+const isIframeable = embed && /^(https?:)?\/\/(www\.)?(youtube|youtube-nocookie|vimeo|player\.vimeo|fb\.watch)\./i.test(embed);
+---
+<Base title={entry.data.title} description={entry.data.summary}>
+  <article class="prose">
+    <header class="post-header">
+      <p class="post-header__eyebrow">
+        <a href="/videolar">Videolar</a>
+      </p>
+      <h1 class="post-header__title">{entry.data.title}</h1>
+      <p class="post-header__date">
+        <time datetime={entry.data.date.toISOString()}>{fmtLong.format(entry.data.date)}</time>
+        {entry.data.outlet && <> · {entry.data.outlet}</>}
+      </p>
+    </header>
+
+    {embed && isIframeable && (
+      <div class="video-embed">
+        <iframe
+          src={embed}
+          title={entry.data.title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    )}
+
+    {embed && !isIframeable && (
+      <p class="callout">
+        <a href={embed} rel="noopener">{embed}</a>
+      </p>
+    )}
+
+    <Content />
+  </article>
+
+  <nav class="post-footer" aria-label="Video sonu gezinmesi">
+    <a href="/videolar" class="link-inline"><span aria-hidden="true">←</span> Tüm videolar</a>
+  </nav>
+</Base>

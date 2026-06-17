@@ -1,0 +1,43 @@
+---
+interface Item {
+  title: string;
+  outlet: string;
+  date: string;
+  url: string;
+  excerpt?: string;
+  quote?: string;
+}
+
+interface Props {
+  items: Item[];
+  /** When true, show full excerpts/quotes; otherwise compact title + outlet only. */
+  rich?: boolean;
+}
+
+const { items, rich = false } = Astro.props;
+
+const fmt = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+<ol class="post-list" role="list">
+  {items.map((item) => {
+    const body = item.excerpt ?? item.quote;
+    const d = new Date(item.date);
+    return (
+      <li class="post-list__item">
+        <a href={item.url} rel="noopener">{item.title}</a>
+        <span class="post-list__date">
+          <span style="color:var(--ink-muted)">{item.outlet}</span>
+          <span style="color:var(--rule-strong);margin:0 0.5em">·</span>
+          <time datetime={d.toISOString()}>{fmt.format(d)}</time>
+        </span>
+        {rich && body && (
+          <p class="post-list__summary">{body}</p>
+        )}
+      </li>
+    );
+  })}
+</ol>

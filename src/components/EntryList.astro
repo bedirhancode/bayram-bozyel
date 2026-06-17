@@ -1,0 +1,54 @@
+---
+import { fmtShort, groupByYear } from '../lib/format';
+
+interface Entry {
+  href: string;
+  title: string;
+  date: Date;
+  outlet?: string;
+  location?: string;
+  summary?: string;
+  external?: boolean;
+}
+
+interface Props {
+  entries: Entry[];
+  groupByYear?: boolean;
+}
+
+const { entries, groupByYear: doGroup = true } = Astro.props;
+
+type Group = { year: number | null; items: Entry[] };
+const groups: Group[] = doGroup
+  ? groupByYear(entries.map((e) => ({ ...e })))
+  : [{ year: null, items: entries }];
+---
+<ol class="entry-list" role="list">
+  {groups.map((group) => (
+    <>
+      {group.year !== null && (
+        <li class="entry-list__year" aria-hidden="true">{group.year}</li>
+      )}
+      {group.items.map((entry) => (
+        <li class="entry-list__item">
+          <a
+            href={entry.href}
+            class="entry-list__title"
+            {...(entry.external ? { rel: 'noopener' } : {})}
+          >
+            {entry.title}
+          </a>
+          <span class="entry-list__meta">
+            {entry.outlet && <span style="color:var(--ink-muted)">{entry.outlet}</span>}
+            {entry.outlet && <span class="dot">·</span>}
+            {entry.location && <><span style="color:var(--ink-muted)">{entry.location}</span><span class="dot">·</span></>}
+            <time datetime={entry.date.toISOString()}>{fmtShort.format(entry.date)}</time>
+          </span>
+          {entry.summary && (
+            <p class="entry-list__summary">{entry.summary}</p>
+          )}
+        </li>
+      ))}
+    </>
+  ))}
+</ol>

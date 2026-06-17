@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { fmtLong } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const items = await getCollection('makaleler', ({ data }) => !data.draft);
+  return items.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} description={entry.data.summary}>
+  <article class="prose prose--longform">
+    <header class="post-header">
+      <p class="post-header__eyebrow">
+        <a href="/makaleler">Makaleler</a>
+      </p>
+      <h1 class="post-header__title">{entry.data.title}</h1>
+      <p class="post-header__date">
+        <time datetime={entry.data.date.toISOString()}>{fmtLong.format(entry.data.date)}</time>
+        {entry.data.sourceOutlet && <> · İlk yayım: {entry.data.sourceOutlet}</>}
+      </p>
+    </header>
+
+    {entry.data.summary && <p class="lead">{entry.data.summary}</p>}
+
+    <Content />
+
+    {entry.data.sourceUrl && (
+      <p class="prose__source">
+        Kaynak: <a href={entry.data.sourceUrl} rel="noopener">{entry.data.sourceOutlet ?? entry.data.sourceUrl}</a>
+      </p>
+    )}
+  </article>
+
+  <nav class="post-footer" aria-label="Yazı sonu gezinmesi">
+    <a href="/makaleler" class="link-inline"><span aria-hidden="true">←</span> Tüm makaleler</a>
+  </nav>
+</Base>

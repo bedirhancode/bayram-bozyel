@@ -1,0 +1,17 @@
+# Cloudflare Workers deploy config — static-only Astro build served via
+# Workers Static Assets. No Worker script required.
+
+name = "bayram-bozyel"
+compatibility_date = "2025-06-01"
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
+
+# Custom domain — Cloudflare DNS bayrambozyel.com hesabına eklendikten sonra
+# aşağıyı yorumdan çıkar.
+# routes = [
+#   { pattern = "bayrambozyel.com", custom_domain = true },
+#   { pattern = "www.bayrambozyel.com", custom_domain = true }
+# ]

@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { fmtLong } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const items = await getCollection('etkinlikler', ({ data }) => !data.draft);
+  return items.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} description={entry.data.summary}>
+  <article class="prose">
+    <header class="post-header">
+      <p class="post-header__eyebrow">
+        <a href="/etkinlikler">Etkinlikler</a>
+      </p>
+      <h1 class="post-header__title">{entry.data.title}</h1>
+      <p class="post-header__date">
+        <time datetime={entry.data.date.toISOString()}>{fmtLong.format(entry.data.date)}</time>
+        {entry.data.location && <> · {entry.data.location}</>}
+      </p>
+    </header>
+
+    {entry.data.summary && <p class="lead">{entry.data.summary}</p>}
+
+    <Content />
+
+    {entry.data.sourceUrl && (
+      <p class="prose__source">
+        Kaynak: <a href={entry.data.sourceUrl} rel="noopener">{entry.data.sourceUrl}</a>
+      </p>
+    )}
+  </article>
+
+  <nav class="post-footer" aria-label="Etkinlik sonu gezinmesi">
+    <a href="/etkinlikler" class="link-inline"><span aria-hidden="true">←</span> Tüm etkinlikler</a>
+  </nav>
+</Base>

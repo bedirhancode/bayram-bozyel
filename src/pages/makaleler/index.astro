@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('makaleler', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((e) => ({
+    href: `/makaleler/${e.id}`,
+    title: e.data.title,
+    date: e.data.date,
+    outlet: e.data.sourceOutlet,
+    summary: e.data.summary,
+  }));
+---
+<Base title="Makaleler" description="Bayram Bozyel'in yazıları.">
+  <header class="post-header">
+    <p class="post-header__eyebrow">İçerik</p>
+    <h1 class="post-header__title">Makaleler</h1>
+    {items.length > 0 && (
+      <p class="post-header__date">{items.length} yazı</p>
+    )}
+  </header>
+
+  {items.length === 0 ? (
+    <div class="callout">
+      <p>Henüz makale yok. İlk yazılar yakında.</p>
+    </div>
+  ) : (
+    <EntryList entries={items} />
+  )}
+</Base>

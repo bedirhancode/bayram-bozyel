@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Public contact channels — sourced from Bayram Bozyel's X (Twitter)
+// profile bio (`@bayrambozyel`) and HAK-PAR's public site.
+const email = 'b.bozyel@hotmail.com';
+const twitter = 'bayrambozyel';
+---
+<Base
+  title="İletişim"
+  description="Bayram Bozyel ile iletişim — e-posta, sosyal medya ve takip kanalları."
+>
+  <article class="prose">
+    <header class="post-header">
+      <p class="post-header__eyebrow">İletişim</p>
+      <h1>İletişim</h1>
+    </header>
+
+    <p class="lead">
+      Yazışma, görüş ve röportaj talepleri için aşağıdaki kanalları
+      kullanabilirsiniz.
+    </p>
+
+    <h2>Doğrudan</h2>
+
+    <ul>
+      <li>
+        <strong>E-posta</strong> —
+        <a href={`mailto:${email}`}>{email}</a>
+      </li>
+      <li>
+        <strong>X (Twitter)</strong> —
+        <a href={`https://x.com/${twitter}`} rel="noopener">@{twitter}</a>
+      </li>
+    </ul>
+
+    <h2>Takip</h2>
+
+    <ul>
+      <li>
+        <strong>RSS</strong> — Yeni yazılar için
+        <a href="/rss.xml">/rss.xml</a> adresine abone olabilirsiniz.
+      </li>
+      <li>
+        <strong>Yazılar</strong> — Bu sayfadaki yazılar:
+        <a href="/yazilar">/yazilar</a>
+      </li>
+      <li>
+        <strong>Arşiv</strong> — Başka yayın organlarında çıkan yazı
+        ve söyleşiler: <a href="/arsiv">/arsiv</a>
+      </li>
+    </ul>
+
+    <h2>Parti</h2>
+
+    <p>
+      Kürdistan Sosyalist Partisi (PSK) ile ilgili konular için
+      partinin kurumsal kanallarına; HAK-PAR ile ilgili konular için
+      <a href="https://hakpar.org.tr" rel="noopener">hakpar.org.tr</a>
+      üzerinden ulaşabilirsiniz.
+    </p>
+  </article>
+</Base>

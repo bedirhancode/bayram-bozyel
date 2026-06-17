@@ -1,0 +1,27 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  const norm = href.replace(/\/$/, '') || '/';
+  if (norm === '/') return path === '/';
+  return path === norm || path.startsWith(norm + '/');
+};
+const link = (href: string, label: string) => ({ href, label, active: isActive(href) });
+
+// 4 content sections + Hakkımda. İletişim + RSS in footer.
+const nav = [
+  link('/makaleler', 'Makaleler'),
+  link('/roportajlar', 'Röportajlar'),
+  link('/etkinlikler', 'Etkinlikler'),
+  link('/videolar', 'Videolar'),
+  link('/hakkimda', 'Hakkımda'),
+];
+---
+<a href="#main" class="skip-link">Ana içeriğe atla</a>
+<header class="site-header">
+  <a href="/" class="site-header__name">Bayram Bozyel</a>
+  <nav class="site-header__nav" aria-label="Birincil">
+    {nav.map((item) => (
+      <a href={item.href} aria-current={item.active ? 'page' : undefined}>{item.label}</a>
+    ))}
+  </nav>
+</header>

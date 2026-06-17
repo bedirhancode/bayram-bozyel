@@ -1,0 +1,124 @@
+# Sveltia CMS configuration — describes the four content collections that
+# Bayram Bozyel can edit from /admin. Each collection maps 1-to-1 with a
+# folder under src/content/.
+#
+# Auth: GitHub OAuth via Cloudflare Worker proxy (see docs/CMS_AUTH.md).
+# Update `repo` after the GitHub repository is created.
+
+backend:
+  name: github
+  repo: bedirhancode/bayram-bozyel
+  branch: main
+  base_url: https://bayram-bozyel-auth.bedirhancode.workers.dev
+  auth_endpoint: /oauth/authorize
+
+# Media: portraits etc. live under public/img.
+media_folder: public/img
+public_folder: /img
+
+# Locale
+locale: tr
+
+# When a user opens /admin without a hash, Sveltia routes to the dashboard.
+site_url: https://bayrambozyel.com
+display_url: https://bayrambozyel.com
+logo_url: /favicon.svg
+
+collections:
+  # ----- MAKALELER -----
+  - name: makaleler
+    label: Makaleler
+    label_singular: Makale
+    folder: src/content/makaleler
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{title}} — {{year}}'
+    sortable_fields: ['date', 'title']
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: date, label: Tarih, widget: datetime, format: 'YYYY-MM-DD', time_format: false, picker_utc: false }
+      - { name: summary, label: Özet, widget: string, required: false }
+      - { name: sourceOutlet, label: Kaynak yayın organı (opsiyonel), widget: string, required: false, hint: 'Ör. Gazete Duvar, Bianet' }
+      - { name: sourceUrl, label: Kaynak URL (opsiyonel), widget: string, required: false, pattern: ['^https?://', 'URL http:// veya https:// ile başlamalı'] }
+      - { name: tags, label: Etiketler, widget: list, required: false, default: [] }
+      - { name: draft, label: Taslak (yayımlama), widget: boolean, default: false }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ----- RÖPORTAJLAR -----
+  - name: roportajlar
+    label: Röportajlar
+    label_singular: Röportaj
+    folder: src/content/roportajlar
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{title}} — {{year}}'
+    sortable_fields: ['date', 'title']
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: date, label: Tarih, widget: datetime, format: 'YYYY-MM-DD', time_format: false, picker_utc: false }
+      - { name: outlet, label: Yayın organı, widget: string, required: false }
+      - { name: interviewer, label: Söyleşiyi yapan, widget: string, required: false }
+      - { name: summary, label: Özet, widget: string, required: false }
+      - { name: sourceUrl, label: Kaynak URL, widget: string, required: false }
+      - { name: embedUrl, label: Gömme URL (video/ses), widget: string, required: false }
+      - { name: draft, label: Taslak, widget: boolean, default: false }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ----- ETKİNLİKLER -----
+  - name: etkinlikler
+    label: Etkinlikler
+    label_singular: Etkinlik
+    folder: src/content/etkinlikler
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{title}} — {{year}}'
+    sortable_fields: ['date', 'title']
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: date, label: Tarih, widget: datetime, format: 'YYYY-MM-DD', time_format: false, picker_utc: false }
+      - { name: location, label: Yer, widget: string, required: false }
+      - {
+          name: kind, label: Tür, widget: select, required: false, default: 'diger',
+          options: [
+            { value: konusma, label: Konuşma },
+            { value: panel, label: Panel },
+            { value: roportaj, label: Röportaj },
+            { value: duyuru, label: Duyuru },
+            { value: diger, label: Diğer }
+          ]
+        }
+      - { name: summary, label: Özet, widget: string, required: false }
+      - { name: sourceUrl, label: Kaynak URL, widget: string, required: false }
+      - { name: draft, label: Taslak, widget: boolean, default: false }
+      - { name: body, label: Açıklama, widget: markdown }
+
+  # ----- VİDEOLAR -----
+  - name: videolar
+    label: Videolar
+    label_singular: Video
+    folder: src/content/videolar
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{title}} — {{year}}'
+    sortable_fields: ['date', 'title']
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: date, label: Tarih, widget: datetime, format: 'YYYY-MM-DD', time_format: false, picker_utc: false }
+      - { name: youtubeId, label: YouTube video ID (11 karakter), widget: string, required: false, hint: 'youtube.com/watch?v=XXXXXXXXXXX adresindeki X kısmı' }
+      - { name: embedUrl, label: Veya tam embed URL, widget: string, required: false }
+      - { name: outlet, label: Yayın organı, widget: string, required: false }
+      - { name: summary, label: Özet, widget: string, required: false }
+      - { name: draft, label: Taslak, widget: boolean, default: false }
+      - { name: body, label: Açıklama, widget: markdown }

@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/bayram-bozyel.jpg';
+
+interface Props {
+  size?: 'sm' | 'lg';
+  alt?: string;
+  /** Eager-load when the image is above the fold (hero). */
+  eager?: boolean;
+}
+
+const {
+  size = 'sm',
+  alt = 'Bayram Bozyel',
+  eager = false,
+} = Astro.props;
+
+// Two render sizes — small for hero (152px), large for /hakkimda (224px).
+// Astro optimises into webp + responsive widths automatically.
+const width = size === 'lg' ? 448 : 304;
+---
+<figure class={`portrait ${size === 'lg' ? 'portrait--large' : ''}`}>
+  <Image
+    src={portrait}
+    alt={alt}
+    width={width}
+    height={width}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    densities={[1, 2]}
+    quality={82}
+  />
+</figure>

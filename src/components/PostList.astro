@@ -1,0 +1,66 @@
+---
+interface PostItem {
+  slug: string;
+  data: {
+    title: string;
+    date: Date;
+    summary?: string;
+  };
+}
+
+interface Props {
+  posts: PostItem[];
+  /** When true, group items under year headings. */
+  groupByYear?: boolean;
+}
+
+const { posts, groupByYear = false } = Astro.props;
+
+const fmt = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const shortFmt = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+});
+
+// Group by year if asked; otherwise one flat group.
+type Group = { year: number | null; items: PostItem[] };
+const groups: Group[] = (() => {
+  if (!groupByYear) return [{ year: null, items: posts }];
+  const byYear = new Map<number, PostItem[]>();
+  for (const p of posts) {
+    const y = p.data.date.getFullYear();
+    if (!byYear.has(y)) byYear.set(y, []);
+    byYear.get(y)!.push(p);
+  }
+  return [...byYear.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([year, items]) => ({ year, items }));
+})();
+---
+<ol class="post-list" role="list">
+  {groups.map((group) => (
+    <>
+      {group.year !== null && (
+        <li class="post-list__year" aria-hidden="true">{group.year}</li>
+      )}
+      {group.items.map((post) => (
+        <li class="post-list__item">
+          <a href={`/yazilar/${post.slug}`}>{post.data.title}</a>
+          <span class="post-list__date">
+            <time datetime={post.data.date.toISOString()}>
+              {groupByYear ? shortFmt.format(post.data.date) : fmt.format(post.data.date)}
+            </time>
+          </span>
+          {post.data.summary && (
+            <p class="post-list__summary">{post.data.summary}</p>
+          )}
+        </li>
+      ))}
+    </>
+  ))}
+</ol>
