@@ -250,9 +250,10 @@ hr {
   font-weight: 400;
 }
 
-/* drop cap — applied only on long-form bodies via .prose--longform */
-.prose--longform > p:first-of-type::first-letter,
-.prose--longform > .lead + p::first-letter {
+/* drop cap — applied to the very first paragraph of long-form bodies.
+   Single, editorial. If there's a `.lead`, it gets the drop cap; otherwise
+   the first regular paragraph does. */
+.prose--longform > p:first-of-type::first-letter {
   font-family: var(--display);
   float: left;
   font-size: 3.2em;
