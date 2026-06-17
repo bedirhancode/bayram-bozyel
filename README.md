@@ -72,8 +72,21 @@ npm run deploy    # = astro build && wrangler deploy
 ```
 
 Sonraki deploy'lar otomatik: `main` branch'ına her push → GitHub Actions →
-build → `wrangler deploy`. Bunun için bir kerelik secret kurulumu için
-[`docs/CMS_AUTH.md`](docs/CMS_AUTH.md).
+build → `wrangler deploy`. Bunun için **tek seferlik** bir kurulum gerek:
+
+```bash
+# 1) gh CLI'a workflow yetkisi ekle (tarayıcı açılır, onayla)
+gh auth refresh -s workflow -h github.com
+
+# 2) Workflow dosyasını doğru yere taşı
+mkdir -p .github/workflows
+git mv docs/templates/github-actions-deploy.yml .github/workflows/deploy.yml
+git commit -m "ci: enable GitHub Actions deploy workflow"
+git push
+```
+
+Ardından GitHub repo → Settings → Secrets → iki secret ekle:
+`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` ([detay](docs/CMS_AUTH.md)).
 
 `wrangler.toml`:
 - `name = "bayram-bozyel"` → Worker adı
