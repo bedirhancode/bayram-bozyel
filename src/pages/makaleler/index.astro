@@ -13,7 +13,7 @@ const items = (await getCollection('makaleler', ({ data }) => !data.draft))
     summary: e.data.summary,
   }));
 ---
-<Base title="Makaleler" description="Bayram Bozyel'in yazıları.">
+<Base title="Makaleler" description="Bayram Bozyel'in yazıları." wide>
   <header class="post-header">
     <p class="post-header__eyebrow">İçerik</p>
     <h1 class="post-header__title">Makaleler</h1>
@@ -27,6 +27,6 @@ const items = (await getCollection('makaleler', ({ data }) => !data.draft))
       <p>Henüz makale yok. İlk yazılar yakında.</p>
     </div>
   ) : (
-    <EntryList entries={items} />
+    <EntryList entries={items} wide />
   )}
 </Base>

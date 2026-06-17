@@ -31,8 +31,8 @@
   --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  --measure: 38rem;              /* ideal reading width */
-  --measure-wide: 52rem;
+  --measure: 44rem;              /* reading column — ~704px (detail + prose) */
+  --measure-wide: 62rem;         /* wide column — ~992px (home + listings) */
   --step: clamp(1.0625rem, 0.95rem + 0.45vw, 1.1875rem);
   --lh: 1.7;
 
@@ -305,6 +305,40 @@ hr {
   padding: 0;
   margin: 0;
 }
+
+/* Two-column grid for wide pages — title on left, meta + summary on right.
+   Falls back to stacked layout below 720px. */
+.entry-list--wide .entry-list__item {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  column-gap: 2.5rem;
+  align-items: baseline;
+}
+@media (max-width: 720px) {
+  .entry-list--wide .entry-list__item {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+}
+.entry-list--wide .entry-list__title {
+  grid-column: 1;
+  grid-row: 1;
+}
+.entry-list--wide .entry-list__meta {
+  grid-column: 1;
+  grid-row: 2;
+}
+.entry-list--wide .entry-list__summary {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin-top: 0;
+  align-self: start;
+}
+@media (max-width: 720px) {
+  .entry-list--wide .entry-list__summary {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
 .entry-list__year {
   font-family: var(--sans);
   font-size: var(--t-eyebrow);
@@ -366,13 +400,19 @@ hr {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  padding-block: 0.5rem 3rem;
+  padding-block: 0.5rem 3.5rem;
   align-items: start;
 }
 @media (min-width: 640px) {
   .hero {
-    grid-template-columns: 1fr 10rem;
-    gap: 2.5rem;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: 3rem;
+  }
+}
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    gap: 4rem;
   }
 }
 .hero__eyebrow {
@@ -412,7 +452,7 @@ hr {
 .portrait {
   display: block;
   width: 100%;
-  max-width: 10rem;
+  max-width: 15rem;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 4px;

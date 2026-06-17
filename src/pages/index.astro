@@ -30,6 +30,7 @@ const map = (entries: any[], base: string, outletKey: string = 'outlet') =>
 ---
 <Base
   description="Bayram Bozyel — yazar ve siyasetçi. Kürt siyaseti, demokrasi ve hak mücadelesi üzerine makaleler, röportajlar ve etkinlikler."
+  wide
 >
   <section class="hero" aria-labelledby="hero-title">
     <div>
@@ -50,7 +51,7 @@ const map = (entries: any[], base: string, outletKey: string = 'outlet') =>
         <h2 id="makaleler-head">Makaleler</h2>
         <a href="/makaleler" class="link-inline">Tümü <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <EntryList entries={map(makaleler, '/makaleler', 'sourceOutlet')} groupByYear={false} />
+      <EntryList entries={map(makaleler, '/makaleler', 'sourceOutlet')} groupByYear={false} wide />
     </section>
   )}
 
@@ -60,7 +61,7 @@ const map = (entries: any[], base: string, outletKey: string = 'outlet') =>
         <h2 id="roportajlar-head">Röportajlar</h2>
         <a href="/roportajlar" class="link-inline">Tümü <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <EntryList entries={map(roportajlar, '/roportajlar')} groupByYear={false} />
+      <EntryList entries={map(roportajlar, '/roportajlar')} groupByYear={false} wide />
     </section>
   )}
 
@@ -70,7 +71,7 @@ const map = (entries: any[], base: string, outletKey: string = 'outlet') =>
         <h2 id="etkinlikler-head">Etkinlikler</h2>
         <a href="/etkinlikler" class="link-inline">Tümü <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <EntryList entries={map(etkinlikler, '/etkinlikler')} groupByYear={false} />
+      <EntryList entries={map(etkinlikler, '/etkinlikler')} groupByYear={false} wide />
     </section>
   )}
 
@@ -80,7 +81,7 @@ const map = (entries: any[], base: string, outletKey: string = 'outlet') =>
         <h2 id="videolar-head">Videolar</h2>
         <a href="/videolar" class="link-inline">Tümü <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <EntryList entries={map(videolar, '/videolar')} groupByYear={false} />
+      <EntryList entries={map(videolar, '/videolar')} groupByYear={false} wide />
     </section>
   )}
 

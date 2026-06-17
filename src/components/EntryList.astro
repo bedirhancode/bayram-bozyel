@@ -14,16 +14,18 @@ interface Entry {
 interface Props {
   entries: Entry[];
   groupByYear?: boolean;
+  /** Two-column layout (title|summary) — used on wide listing pages. */
+  wide?: boolean;
 }
 
-const { entries, groupByYear: doGroup = true } = Astro.props;
+const { entries, groupByYear: doGroup = true, wide = false } = Astro.props;
 
 type Group = { year: number | null; items: Entry[] };
 const groups: Group[] = doGroup
   ? groupByYear(entries.map((e) => ({ ...e })))
   : [{ year: null, items: entries }];
 ---
-<ol class="entry-list" role="list">
+<ol class={`entry-list ${wide ? 'entry-list--wide' : ''}`} role="list">
   {groups.map((group) => (
     <>
       {group.year !== null && (
