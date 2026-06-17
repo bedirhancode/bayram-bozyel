@@ -24,3 +24,9 @@ pnpm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# stray screenshots / scratch
+bayram-review/
+*.png
+!public/**/*.png
+!src/assets/**/*.png
