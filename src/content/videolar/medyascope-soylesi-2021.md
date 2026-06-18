@@ -9,7 +9,3 @@ draft: false
 
 Medyascope'ta yayımlanan video söyleşi. Bayram Bozyel, yeni Kürt
 partileri tartışmaları, HDP ve Kürt seçmenin tutumu üzerine konuştu.
-
-> Bu sayfaya henüz video gömülü olarak eklenmedi. Sveltia CMS'in
-> Videolar bölümünde `youtubeId` alanına 11 karakterli YouTube
-> kimliğini ekleyerek videoyu doğrudan göm.

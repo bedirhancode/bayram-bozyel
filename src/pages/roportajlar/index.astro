@@ -15,7 +15,6 @@ const items = (await getCollection('roportajlar', ({ data }) => !data.draft))
 ---
 <Base title="Röportajlar" description="Bayram Bozyel ile söyleşiler." wide>
   <header class="post-header">
-    <p class="post-header__eyebrow">İçerik</p>
     <h1 class="post-header__title">Röportajlar</h1>
     {items.length > 0 && (
       <p class="post-header__date">{items.length} röportaj</p>

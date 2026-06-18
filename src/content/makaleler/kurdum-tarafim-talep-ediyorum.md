@@ -8,5 +8,3 @@ tags: ["kimlik", "haklar"]
 ---
 
 Kürt kimliği, taraf olmak ve hak talebi üzerine erken dönem bir yazı.
-
-> Tam metin için Bianet arşivi.

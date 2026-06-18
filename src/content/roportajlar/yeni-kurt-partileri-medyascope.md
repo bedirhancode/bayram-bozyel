@@ -10,5 +10,3 @@ summary: "İktidarın baskıları HDP'yi güçlendiriyor, yeni bir Kürt partisi
 > saldırılar karşısında insanlar HDP'ye yöneliyor. Şu aşamada farklı
 > Kürt parti ve oluşumlarının Kürt seçmende karşılık bulması mümkün
 > değil.
-
-Söyleşinin tamamı: [Medyascope](https://medyascope.tv/2021/03/02/siyasetci-bayram-bozyel-ile-yeni-kurt-partileri-tartismalari-uzerine-soylesi-iktidarin-baskilari-hdpyi-guclendiriyor-yeni-bir-kurt-partisinin-karsilik-bulmasi-mumkun-degil/)

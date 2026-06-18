@@ -8,5 +8,3 @@ tags: ["hukuk", "kurt-sorunu"]
 ---
 
 Kürt meselesinin çözümünde hukukun üstünlüğünün rolü.
-
-> Tam metin için Bianet arşivi.

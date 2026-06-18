@@ -7,5 +7,3 @@ summary: "Kürt Ulusal Konferansı'nın hazırlık süreci üzerine."
 ---
 
 Kürt Ulusal Konferansı'nın hazırlık süreci üzerine açıklama.
-
-[Bianet haberi](https://bianet.org/)

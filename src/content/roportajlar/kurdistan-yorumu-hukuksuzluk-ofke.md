@@ -9,5 +9,3 @@ summary: "Meral Akşener Siirt'te, Mustafa Sarıgül'e Van'da seçmenden gelen '
 Meral Akşener Siirt'te, Mustafa Sarıgül'e Van'da seçmenden gelen "Burası
 Kürdistan'dır" tepkisini değerlendiren Bayram Bozyel: "Hukuksuzluk
 öfkeye yol açıyor."
-
-Söyleşinin tamamı: [Gazete Duvar](https://www.gazeteduvar.com.tr/bozyelden-kurdistandir-yorumu-hukuksuzluk-ofkeye-yol-aciyor-haber-1543769)

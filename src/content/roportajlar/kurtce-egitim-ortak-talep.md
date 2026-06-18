@@ -11,5 +11,3 @@ summary: "Bugün seçmeli ders hakkı işlevsiz duruma getirilmiştir. Kürt dil
 > izlenen bir tercihin sonucudur. Hükümet, Kürt politikasındaki karşıtlık
 > ve çatışma politikasına bağlı olarak bütün bu hakları işlemez hale
 > getiriyor. Kürt diline karşı topyekûn bir saldırı var.
-
-Söyleşinin tamamı: [Bianet](https://bianet.org/haber/bayram-bozyel-kurtce-egitim-kurtlerin-ortak-talebidir-299488)

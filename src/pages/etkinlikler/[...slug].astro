@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
-import { fmtLong } from '../../lib/format';
+import { fmtLong, prettyHost } from '../../lib/format';
 
 export async function getStaticPaths() {
   const items = await getCollection('etkinlikler', ({ data }) => !data.draft);
@@ -27,13 +27,11 @@ const { Content } = await render(entry);
       </p>
     </header>
 
-    {entry.data.summary && <p class="lead">{entry.data.summary}</p>}
-
     <Content />
 
     {entry.data.sourceUrl && (
       <p class="prose__source">
-        Kaynak: <a href={entry.data.sourceUrl} rel="noopener">{entry.data.sourceUrl}</a>
+        Kaynak: <a href={entry.data.sourceUrl} rel="noopener">{prettyHost(entry.data.sourceUrl)}</a>
       </p>
     )}
   </article>

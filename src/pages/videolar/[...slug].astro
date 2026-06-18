@@ -14,12 +14,22 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-// Build embed URL — prefer YouTube id (privacy-enhanced nocookie embed).
-const embed = entry.data.youtubeId
+// Prefer YouTube id (privacy-enhanced nocookie embed).
+const youTubeEmbed = entry.data.youtubeId
   ? `https://www.youtube-nocookie.com/embed/${entry.data.youtubeId}`
-  : entry.data.embedUrl ?? null;
+  : null;
 
-const isIframeable = embed && /^(https?:)?\/\/(www\.)?(youtube|youtube-nocookie|vimeo|player\.vimeo|fb\.watch)\./i.test(embed);
+// Accept other iframeable hosts via embedUrl (Vimeo, YouTube playlists…).
+const otherEmbed = entry.data.embedUrl &&
+  /^(https?:)?\/\/(www\.)?(youtube|youtube-nocookie|vimeo|player\.vimeo)\./i.test(entry.data.embedUrl)
+  ? entry.data.embedUrl
+  : null;
+
+const embed = youTubeEmbed ?? otherEmbed;
+
+// Fallback link: any URL provided that we can't iframe (e.g. Medyascope page).
+const externalLink = !embed && entry.data.embedUrl ? entry.data.embedUrl : null;
+const externalHost = externalLink ? new URL(externalLink).hostname.replace(/^www\./, '') : null;
 ---
 <Base title={entry.data.title} description={entry.data.summary}>
   <article class="prose">
@@ -34,7 +44,7 @@ const isIframeable = embed && /^(https?:)?\/\/(www\.)?(youtube|youtube-nocookie|
       </p>
     </header>
 
-    {embed && isIframeable && (
+    {embed && (
       <div class="video-embed">
         <iframe
           src={embed}
@@ -46,10 +56,13 @@ const isIframeable = embed && /^(https?:)?\/\/(www\.)?(youtube|youtube-nocookie|
       </div>
     )}
 
-    {embed && !isIframeable && (
-      <p class="callout">
-        <a href={embed} rel="noopener">{embed}</a>
-      </p>
+    {externalLink && (
+      <div class="callout">
+        <p>
+          Video {entry.data.outlet ?? externalHost} üzerinde yayımlandı —
+          <a href={externalLink} rel="noopener">{externalHost} üzerinde izle <span aria-hidden="true">→</span></a>
+        </p>
+      </div>
     )}
 
     <Content />

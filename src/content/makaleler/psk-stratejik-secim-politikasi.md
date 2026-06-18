@@ -10,5 +10,3 @@ tags: ["psk", "secim", "ittifak"]
 Kürt Özgürlük ve Demokrasi İttifakı bir ilk adım niteliğindedir. Öte
 yandan Kürtler açısından asıl sürecin seçimlerden sonra başlayacağını
 bir kez daha vurgulamakta fayda var.
-
-> Yazının tamamı için: [Gazete Duvar](https://www.gazeteduvar.com.tr/psknin-stratejik-secim-politikasi-haber-1614962)

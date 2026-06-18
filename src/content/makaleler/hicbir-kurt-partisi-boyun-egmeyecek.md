@@ -8,5 +8,3 @@ tags: ["hdp", "kapatma-davasi"]
 ---
 
 HDP'ye yönelik kapatma davası ve Kürt partilerinin tutumu üzerine yazı.
-
-> Tam metin için: [Bianet](https://bianet.org/haber/hicbir-kurt-partisi-boyun-egmeyecek-272184)

@@ -26,3 +26,14 @@ export function groupByYear<T extends { date: Date }>(items: T[]): EntryGroup<T>
     .sort((a, b) => b[0] - a[0])
     .map(([year, items]) => ({ year, items }));
 }
+
+// Pretty hostname for source-link displays — "https://www.bianet.org/x"
+// becomes "bianet.org". Falls back to the raw input on parse failures.
+export function prettyHost(url: string | undefined): string {
+  if (!url) return '';
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}

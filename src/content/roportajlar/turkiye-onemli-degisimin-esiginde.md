@@ -10,5 +10,3 @@ summary: "Kürt Özgürlük ve Demokrasi İttifakı içinde yer alan PSK'nin Gen
 
 PSK Genel Başkanı Bayram Bozyel, 14 Mayıs seçimleri ve Kürt Özgürlük
 ve Demokrasi İttifakı üzerine konuştu.
-
-Söyleşinin tamamı: [Gazete Duvar](https://www.gazeteduvar.com.tr/psk-genel-baskani-bozyel-kurt-meselesinin-cozumu-turkiyeyi-demokratiklestirecek-haber-1611795)

@@ -9,5 +9,3 @@ tags: ["psk", "ittifak", "kurt-birligi"]
 
 Kürt Özgürlük ve Demokrasi İttifakı'nın kuruluş deklarasyonu üzerine
 yazı.
-
-> Tam metin için: [Bianet](https://bianet.org/haber/kurtlerin-birligi-kurtlerin-ozgurlugudur-276741)

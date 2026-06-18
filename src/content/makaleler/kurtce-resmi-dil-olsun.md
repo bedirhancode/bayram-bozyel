@@ -8,5 +8,3 @@ tags: ["anadil", "kurtce"]
 ---
 
 Kürtçenin resmi dil statüsüne kavuşması için yapılan açıklama.
-
-> Tam metin için: [Bianet](https://bianet.org/)

@@ -9,6 +9,3 @@ summary: "Diyarbakır merkezli operasyonda 14 siyasetçi ve sendikacı tutukland
 
 Diyarbakır merkezli operasyonda 14 siyasetçi ve sendikacı tutuklandı;
 Bayram Bozyel de gözaltına alınanlar arasında yer aldı.
-
-[Medyascope haberi](https://medyascope.tv/2021/11/15/diyarbakirda-14-siyasetci-ve-sendikaci-tutuklandi/) ·
-[Bianet haberi](https://bianet.org/haber/diyarbakir-da-gozaltina-alinan-19-kisiden-14-u-tutuklandi-253373)
